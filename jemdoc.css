@@ -10,6 +10,9 @@
   --link-hover: #3056a9;
   --link-active: #233566;
   --sticky-offset: 16px;
+  --publication-gap: 1.25rem;
+  --internship-gap: 0rem;
+  --education-gap: 0.75rem;
 }
 
 table#tlayout {
@@ -52,6 +55,7 @@ body {
 	top: var(--sticky-offset);
 	left: calc(50% - 600px);
 	width: 160px;
+	z-index: 10;
 	font-family: sans-serif;
 	font-size: 0.875rem;
 	line-height: 1.6;
@@ -113,9 +117,32 @@ body {
 	padding-bottom: 0.1em;
 }
 
-#selected-publications + p {
-	display: inline;
+#selected-publications + p.publication-note {
+	display: block;
+	margin: 0.05em 0 0.75em;
+	font-size: 0.8rem;
 	line-height: 1.4;
+}
+
+.publications-list {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.publications-list .publication-entry + .publication-entry td {
+	padding-top: var(--publication-gap);
+}
+
+.publications-list .publication-entry td {
+	vertical-align: middle;
+}
+
+.internship-list tr + tr td {
+	padding-top: var(--internship-gap);
+}
+
+.education-list tr + tr td {
+	padding-top: var(--education-gap);
 }
 
 #layout-content {
@@ -440,19 +467,133 @@ span.comment, span.comment > *, span.string, span.string > * {
 	#layout-menu { display: none; }
 }
 
+/* Move the side navigation above the content when there is not enough room
+   for a fixed left rail. */
 @media (max-width: 1240px) {
+	body {
+		box-sizing: border-box;
+		width: 100%;
+		max-width: 1060px;
+		padding-left: clamp(16px, 5vw, 50px);
+		padding-right: clamp(16px, 5vw, 50px);
+	}
+
 	#page-contents {
 		position: static;
 		width: auto;
 		margin: 0 0 1.5em;
+		padding: 0.5rem 0 0.75rem;
+		border-bottom: 1px solid var(--border-muted);
+	}
+
+	#page-contents h2 {
+		width: auto;
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.35rem;
+	}
+
+	#page-contents h2::after {
+		left: 0;
 	}
 
 	#page-contents ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1rem;
+	}
+
+	#page-contents li {
+		flex: 0 1 auto;
+	}
+
+	#page-contents a {
+		padding: 0.25rem 0;
+	}
+
+	#page-contents::after {
 		display: none;
 	}
 
 	#layout-content {
 		margin-left: 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	#layout-content img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	#layout-content table {
+		max-width: 100%;
+	}
+}
+
+@media (max-width: 700px) {
+	body {
+		padding-left: 16px;
+		padding-right: 16px;
+		padding-top: 0;
+	}
+
+	#page-contents {
+		margin-bottom: 1em;
+	}
+
+	#page-contents ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+		gap: 0;
+	}
+
+	#page-contents a {
+		padding: 0.4rem 0;
+	}
+
+	/* Stack publication and education entries instead of forcing a wide
+	   two-column table onto a narrow viewport. */
+	#tbPublications,
+	#tbPublications tbody,
+	#tbPublications tr,
+	#tbPublications td {
+		display: block;
+		width: auto !important;
+	}
+
+	#tbPublications td:first-child {
+		margin-bottom: 0.75rem;
+	}
+
+	.publications-list .publication-entry + .publication-entry {
+		margin-top: var(--publication-gap);
+	}
+
+	.publications-list .publication-entry + .publication-entry td {
+		padding-top: 0;
+	}
+
+	.publications-list .publication-entry td {
+		vertical-align: top;
+	}
+}
+
+@media (max-width: 1000px) {
+	.profile-header,
+	.profile-header tbody,
+	.profile-header tr,
+	.profile-header td {
+		display: block;
+		width: auto !important;
+	}
+
+	.profile-header td:first-child {
+		padding-right: 0 !important;
+		margin-bottom: 1rem;
+	}
+
+	.profile-header td:last-child {
+		padding-left: 0 !important;
 	}
 }
 
@@ -502,6 +643,22 @@ tr.heading {
 
 img {
     border: none;
+}
+
+/* Keep the profile assets at their intended dimensions. The responsive image
+   rule below applies to publication images, but must not resize these assets. */
+#layout-content img.profile-photo {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+	height: auto;
+}
+
+#layout-content img.social-icon {
+	width: auto;
+	height: 30px;
+	max-width: none;
+	object-fit: contain;
 }
 
 table.imgtable, table.imgtable td {
