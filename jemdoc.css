@@ -3,30 +3,19 @@
 :root {
   --page-background: #ffffff;
   --page-foreground: #202122;
-  --subtle-background: #f8f9fa;
   --border-base: #a2a9b1;
   --border-muted: #dadde3;
   --link-color: #36c;
   --link-hover: #3056a9;
   --link-active: #233566;
+  --page-max-width: 1230px;
+  --page-gutter: 32px;
   --sticky-offset: 16px;
   --publication-gap: 1.25rem;
-  --internship-gap: 0rem;
   --education-gap: 0.75rem;
+  --section-edge-padding: 1px;
 }
 
-table#tlayout {
-    border: none;
-    border-collapse: separate;
-    background: white;
-}
-/*
-body {
-	background: white;
-	padding-bottom: 8px;
-	margin: 0;
-}
-*/
 html {
   background-color: var(--page-background);
   font-size: 100%;
@@ -34,6 +23,8 @@ html {
 }
 
 body {
+  box-sizing: border-box;
+  width: 100%;
   font-family: sans-serif;
   color: var(--page-foreground);
   background-color: var(--page-background);
@@ -42,19 +33,19 @@ body {
   margin-bottom: 30px;
   margin-left: auto;
   margin-right: auto;
-  padding-left:  50px;
-  padding-right: 50px;
+  padding-left: var(--page-gutter);
+  padding-right: var(--page-gutter);
   padding-top: 6px;
   padding-bottom: 30px;
-  max-width: 960px;
+  max-width: var(--page-max-width);
   line-height: 1.625;
 }
 
 #page-contents {
 	position: fixed;
 	top: var(--sticky-offset);
-	left: calc(50% - 600px);
-	width: 160px;
+	left: calc(50% - 563.5px);
+	width: 140px;
 	z-index: 10;
 	font-family: sans-serif;
 	font-size: 0.875rem;
@@ -64,7 +55,7 @@ body {
 #page-contents h2 {
 	display: block;
 	margin: 0 0 0.25em;
-	width: 180px;
+	width: 160px;
 	padding-bottom: 6px;
 	font-family: sans-serif;
 	font-size: 0.875rem;
@@ -77,7 +68,7 @@ body {
 #page-contents h2::after {
 	content: "";
 	position: absolute;
-	left: -30px;
+	left: 0;
 	right: 0;
 	bottom: 0;
 	height: 1px;
@@ -103,11 +94,11 @@ body {
 
 #page-contents::after {
 	content: "";
-	position: fixed;
-	top: 0;
+	position: absolute;
+	top: 0px;
+	bottom: -30px;
 	right: auto;
-	left: calc(50% - 419px);
-	height: 100vh;
+	left: calc(100% + 21px);
 	width: 1px;
 	background-color: var(--border-muted);
 }
@@ -118,15 +109,33 @@ body {
 }
 
 #selected-publications + p.publication-note {
-	display: block;
 	margin: 0.05em 0 0.75em;
 	font-size: 0.8rem;
 	line-height: 1.4;
 }
 
-.publications-list {
+.publications-list,
+.experience-list,
+.education-list {
+	width: 100%;
 	border-collapse: separate;
 	border-spacing: 0;
+}
+
+.publications-list td:first-child,
+.experience-list td:first-child {
+	width: 306px;
+}
+
+.publications-list td,
+.experience-list td,
+.education-list td {
+	padding: var(--section-edge-padding);
+}
+
+.publication-thumbnail {
+	width: 285px;
+	box-shadow: 4px 4px 8px #888;
 }
 
 .publications-list .publication-entry + .publication-entry td {
@@ -137,61 +146,69 @@ body {
 	vertical-align: middle;
 }
 
-.internship-list tr + tr td {
-	padding-top: var(--internship-gap);
+.experience-list td {
+	vertical-align: middle;
+}
+
+.experience-logo-ace {
+	display: block;
+	width: 200px;
+	margin: 0 auto 0 23px;
+}
+
+.experience-logo-kling {
+	width: 250px;
+}
+
+.profile-header td {
+	vertical-align: top;
+}
+
+.profile-header td:first-child {
+	padding-right: 20px;
+}
+
+.profile-header td:last-child {
+	width: 670px;
+	padding-left: 15px;
 }
 
 .education-list tr + tr td {
 	padding-top: var(--education-gap);
 }
 
-#layout-content {
-	margin-left: 100px;
+.education-container {
+	container: education / inline-size;
 }
 
-#layout-menu {
-	background: #f6f6f6;
-	border: 1px solid #dddddd;
-	padding-top: 0.5em;
-	padding-left: 8px;
-	padding-right: 8px;
-	font-size: 1.0em;
-	width: auto;
-	white-space: nowrap;
-    text-align: left;
-    vertical-align: top;
+.education-heading {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.25rem 1rem;
 }
 
-#layout-menu td {
-	background: #f4f4f4;
-    vertical-align: top;
+@container education (max-width: 35em) {
+	.education-date {
+		flex: 0 0 100%;
+	}
 }
 
 #layout-content {
-	padding-top: 0.0em;
-	padding-left: 1.0em;
-	padding-right: 1.0em;
-    border: none;
-    background: white;
-    text-align: left;
-    vertical-align: top;
+	/* Center the full 140px sidebar, its 53px gap, and the text as one group. */
+	position: relative;
+	left: 96.5px;
+	max-width: calc(var(--page-max-width) - 2 * var(--page-gutter) - 200px - 2em);
+	margin-top: 12px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 1em;
+	padding-right: 1em;
+	background: white;
 }
 
-#layout-menu a {
-	line-height: 1.5em;
-	margin-left: 0.5em;
-}
-
-tt {
-    background: #ffffdd;
-}
-
-pre, tt {
-	font-size: 90%;
-	font-family: monaco, monospace;
-}
-
-a, a > tt {
+a {
 	color: var(--link-color);
 	text-decoration: none;
 	border-radius: 2px;
@@ -216,60 +233,12 @@ a:focus-visible {
 	outline-offset: 2px;
 }
 
-#layout-menu a.current:link, #layout-menu a.current:visited {
-	color: var(--link-active);
-	border-bottom: 1px gray solid;
-}
-#layout-menu a:link, #layout-menu a:visited, #layout-menu a:hover {
-	color: var(--link-color);
-	text-decoration: none;
-}
-#layout-menu a:hover {
-	color: var(--link-hover);
-	text-decoration: underline;
-}
-
-div.menu-category {
-	border-bottom: 1px solid gray;
-	margin-top: 0.8em;
-	padding-top: 0.2em;
-	padding-bottom: 0.1em;
-	font-weight: bold;
-}
-
-div.menu-item {
-	padding-left: 16px;
-	text-indent: -16px;
-}
-
 div#toptitle {
-	padding-bottom: 0.2em;
-	margin-bottom: 1.5em;
-	/*border-bottom: 3px double gray;*/
+	padding-bottom: 0;
+	margin-bottom: 0.36em;
 }
 
-/* Reduce space if we begin the page with a title. */
-div#toptitle + h2, div#toptitle + h3 {
-	margin-top: 0em;
-}
-
-div#subtitle {
-	margin-top: 0.0em;
-	margin-bottom: 0.0em;
-	padding-top: 0em;
-	padding-bottom: 0.1em;
-}
-
-em {
-	font-style: italic;
-}
-
-strong {
-	font-weight: bold;
-}
-
-
-h1, h2, h3 {
+h1, h2 {
 	color: var(--page-foreground);
 	margin-top: 0.7em;
 	margin-bottom: 0.5em;
@@ -295,20 +264,45 @@ h2 {
 	line-height: 1.375;
 }
 
-h3 {
-	font-size: 120%;
-	font-weight: bold;
-	line-height: 1.6;
-	border-bottom: none;
+#selected-publications,
+#education,
+#honors-awards {
+	margin-top: calc(0.7em - 0.5rem);
 }
 
-#toptitle + h3.profile-info,
-#toptitle ~ p.profile-info {
+.profile-header .profile-info {
 	font-family: "Linux Libertine", Georgia, Times, "Source Serif 4", serif;
 }
 
-h2 + h3 {
-    padding-top: 0.2em;
+.profile-header .profile-degree {
+	padding-top: 0.5em;
+	padding-bottom: 0.2em;
+	font-size: 110%;
+	font-weight: normal;
+	line-height: 1.2;
+}
+
+.profile-header p.profile-info {
+	margin-top: 0;
+	margin-bottom: 0.66em;
+}
+
+.profile-affiliation {
+	line-height: 1.35;
+}
+
+.profile-links {
+	margin: 0;
+}
+
+.biography-text {
+	text-align: justify;
+	text-align-last: left;
+}
+
+.biography-content {
+	display: flow-root;
+	padding-bottom: var(--section-edge-padding);
 }
 
 p {
@@ -318,162 +312,67 @@ p {
 	line-height: 1.625;
 }
 
-pre {
-	padding: 0;
+.content-divider {
+	border: 0;
+	border-top: 1px solid var(--border-muted);
+	margin: 4em 0 0;
+}
+
+#page-footer {
+	display: flow-root;
+	margin-top: 32px;
+	text-align: center;
+}
+
+.footer-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.6em;
+	font-size: 0.875rem;
+}
+
+.footer-content > * {
 	margin: 0;
 }
 
-div#footer {
-	font-size: small;
-	border-top: 1px solid var(--border-muted);
-	padding-top: 0.1em;
-	margin-top: 4.0em;
-	color: #54595d;
+.visitor-counter-number {
+	display: inline-block;
 }
 
-div#footer a {
-	color: var(--link-color);
-}
-
-div#footer-text {
-	float: left;
-	padding-bottom: 8px;
-}
-
-ul, ol, dl {
-	margin-top: 0.2em;
-	padding-top: 0;
-	margin-bottom: 0.8em;
-}
-
-dt {
-	margin-top: 0.5em;
-	margin-bottom: 0;
-}
-
-dl {
-	margin-left: 20px;
-}
-
-dd {
-	color: #222222;
-}
-
-dd > *:first-child {
-	margin-top: 0;
+.visitor-counter img {
+	height: 16px;
+	width: auto;
+	vertical-align: middle;
 }
 
 ul {
+	margin-top: 0.2em;
+	padding-top: 0;
+	margin-bottom: 0.8em;
 	list-style-position: outside;
 	list-style-type: square;
 }
 
-p + ul, p + ol {
-	margin-top: -0.5em;
+.honors-list {
+	padding-left: 1.25em;
 }
 
-li {
-	margin-top:0.9em;
+.honors-list li {
+	margin-top: 0.25em;
 }
 
-ol {
-	list-style-position: outside;
-	list-style-type: decimal;
-}
-
-li p, dd p {
-	margin-bottom: 0.3em;
-}
-
-
-ol ol {
-	list-style-type: lower-alpha;
-}
-
-ol ol ol {
-	list-style-type: lower-roman;
-}
-
-p + div.codeblock {
-	margin-top: -0.6em;
-}
-
-div.codeblock, div.infoblock {
-	margin-right: 0%;
-	margin-top: 1.2em;
-	margin-bottom: 1.3em;
-}
-
-div.blocktitle {
-	font-weight: bold;
-	color: #cd7b62;
-	margin-top: 1.2em;
-	margin-bottom: 0.1em;
-}
-
-div.blockcontent {
-	border: 1px solid silver;
-	padding: 0.3em 0.5em;
-}
-
-div.infoblock > div.blockcontent {
-	background: #ffffee;
-}
-
-div.blockcontent p + ul, div.blockcontent p + ol {
-	margin-top: 0.4em;
-}
-
-div.infoblock p {
-	margin-bottom: 0em;
-}
-
-div.infoblock li p, div.infoblock dd p {
-	margin-bottom: 0.5em;
-}
-
-div.infoblock p + p {
-	margin-top: 0.8em;
-}
-
-div.codeblock > div.blockcontent {
-	background: #f6f6f6;
-}
-
-span.pycommand {
-	color: #000070;
-}
-
-span.statement {
-	color: #008800;
-}
-span.builtin {
-	color: #000088;
-}
-span.special {
-	color: #990000;
-}
-span.operator {
-	color: #880000;
-}
-span.error {
-	color: #aa0000;
-}
-span.comment, span.comment > *, span.string, span.string > * {
-	color: #606060;
-}
-
-@media print {
-	#layout-menu { display: none; }
+.honors-list li:first-child {
+	margin-top: 0;
 }
 
 /* Move the side navigation above the content when there is not enough room
    for a fixed left rail. */
-@media (max-width: 1240px) {
+@media (max-width: 1279px) {
 	body {
 		box-sizing: border-box;
 		width: 100%;
-		max-width: 1060px;
+		max-width: var(--page-max-width);
 		padding-left: clamp(16px, 5vw, 50px);
 		padding-right: clamp(16px, 5vw, 50px);
 	}
@@ -481,7 +380,8 @@ span.comment, span.comment > *, span.string, span.string > * {
 	#page-contents {
 		position: static;
 		width: auto;
-		margin: 0 0 1.5em;
+		max-width: calc(var(--page-max-width) - 2 * var(--page-gutter) - 200px - 2em);
+		margin: 0 auto 1.5em;
 		padding: 0.5rem 0 0.75rem;
 		border-bottom: 1px solid var(--border-muted);
 	}
@@ -515,7 +415,8 @@ span.comment, span.comment > *, span.string, span.string > * {
 	}
 
 	#layout-content {
-		margin-left: 0;
+		left: 0;
+		margin-left: auto;
 		padding-left: 0;
 		padding-right: 0;
 	}
@@ -551,17 +452,16 @@ span.comment, span.comment > *, span.string, span.string > * {
 		padding: 0.4rem 0;
 	}
 
-	/* Stack publication and education entries instead of forcing a wide
-	   two-column table onto a narrow viewport. */
-	#tbPublications,
-	#tbPublications tbody,
-	#tbPublications tr,
-	#tbPublications td {
+	/* Keep table entries readable on narrow viewports. */
+	:is(#publications-table, #education-table, #experience-table),
+	:is(#publications-table, #education-table, #experience-table) tbody,
+	:is(#publications-table, #education-table, #experience-table) tr,
+	:is(#publications-table, #education-table, #experience-table) td {
 		display: block;
 		width: auto !important;
 	}
 
-	#tbPublications td:first-child {
+	:is(#publications-table, #experience-table) td:first-child {
 		margin-bottom: 0.75rem;
 	}
 
@@ -597,57 +497,22 @@ span.comment, span.comment > *, span.string, span.string > * {
 	}
 }
 
-#fwtitle {
-	margin: 2px;
-}
-
-#fwtitle #toptitle {
-	padding-left: 0.5em;
-	margin-bottom: 0.5em;
-}
-
-#layout-content h1:first-child, #layout-content h2:first-child, #layout-content h3:first-child {
-	margin-top: -0.7em;
-}
-
-div#toptitle h1, #layout-content div#toptitle h1 {
+div#toptitle h1 {
 	margin-bottom: 0.0em;
 	padding-bottom: 0.1em;
 	padding-top: 0;
-	margin-top: 0.5em;
+	margin-top: 0;
 	border-bottom: none;
 }
 
-img.eq {
-	padding: 0;
-	padding-left: 0.1em;
-	padding-right: 0.1em;
-	margin: 0;
-}
-
-img.eqwl {
-	padding-left: 2em;
-	padding-top: 0.6em;
-	padding-bottom: 0.2em;
-	margin: 0;
-}
-
-table + table {
-    margin-top: 1em;
-}
-
-tr.heading {
-    font-weight: bold;
-    border-bottom: 2px solid black;
-}
-
 img {
-    border: none;
+	border: none;
 }
 
 /* Keep the profile assets at their intended dimensions. The responsive image
    rule below applies to publication images, but must not resize these assets. */
 #layout-content img.profile-photo {
+	display: block;
 	width: 200px;
 	min-width: 200px;
 	max-width: 200px;
@@ -659,9 +524,5 @@ img {
 	height: 30px;
 	max-width: none;
 	object-fit: contain;
-}
-
-table.imgtable, table.imgtable td {
-    border: none;
-    text-align: left;
+	margin-bottom: -3px;
 }
